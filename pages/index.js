@@ -2,36 +2,55 @@
 
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
-import { useEffect ,useState} from 'react'
 import Link from 'next/link'
 
 
-//Client Side Rendering
-//In next js you are always doing server side rendering 
-//but we can choose to write client side rendering in pages like this
-//where we can stall the rendering util you get to the client
-//That might be good choice for some usecases 
-//like ecommerce app we can use cart and checkout page which are compeltely
-//dynamic and where we not get any benefit of server side rendering
+//Server Side Rendering
+
+  //fetch at server side time
+  //requests goes and it gathers up the data
+  //and then returnns an objet that has props in it
+  //and then these props are send to react components to render data
 
 
-export default function Home() {
-  const [pokemon, setPokemon] = useState([])
+  //when we make a request to the home page
+  //that calls getServerSideProps first then will are getting
+  //all that data in props and the we pass it to the component
+  //for rendering
 
-  useEffect(() => {
-    async function getPokemon(){
-      const resp = await fetch('https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json')
-      setPokemon(await resp.json())
+  //we can also combine it with client side for some part of data
+  //that can be requested on client after the page loads
+
+  //so now everything is written on the server side
+  //and then going over the client
+  //so in terms of network traffic, its really great
+  //beacuse all of the network connection to liek your backend services
+  //databases etc thats all happening on the server side
+  //so its super efficient and customers bandwidth is not
+  //wasted by having them go back to apis
+  export async function getServerSideProps(){
+    const resp = await fetch('https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json')
+
+    return {
+      props: {
+        pokemon: await resp.json()
+      }
     }
-    getPokemon()
-  },[])
+  }
+
+
+export default function Home({pokemon}) {
+
+
+
+ 
   return (
     <div className={styles.container}>
       <Head>
         <title>Pokemon List</title>
       </Head>
       <div className={styles.grid}>
-        {pokemon.map((pokemon) => (
+        {pokemon?.map((pokemon) => (
           <div className={styles.card} key={pokemon.id}>
               <Link href={`/pokemon/${pokemon.id}`}>
                 
