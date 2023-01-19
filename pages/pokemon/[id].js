@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+import { useEffect ,useState} from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Details.module.css'
-import { useEffect ,useState} from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
